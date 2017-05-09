@@ -2,14 +2,14 @@
 
 deplist() {
 	local pkg="$1"
-	awk -F ' = ' '/([^a-z]|make)depends =/{print $2}' \
-		"$pkg/.SRCINFO"
+	sed -n '/^pkgbase/,/^pkgname/p' "$pkg/.SRCINFO" | \
+	awk -F ' = ' '/([^a-z]|make)depends =/{print $2}'
 }
 
 providelist() {
 	local pkg="$1"
-	awk -F ' = ' '/(provides|pkgname) =/{print $2}' \
-		"$pkg/.SRCINFO"
+	sed -n '/^pkgbase/,/^pkgname/p' "$pkg/.SRCINFO" | \
+	awk -F ' = ' '/(provides|pkgname) =/{print $2}'
 }
 
 for pkg in */; do
